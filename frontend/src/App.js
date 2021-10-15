@@ -1,10 +1,21 @@
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import './App.css';
+import Home from './components/Home';
+import Footer from './components/layout/Footer';
+import Header from './components/layout/Header';
 
 function App() {
   return (
-    <div className="App">
-      <h1>Aristo Market</h1>
-    </div>
+    <Router>
+      <div className="App">
+        <Header />
+        <div className="container container-fluid">
+          <Route path="/" component={Home} exact />
+        </div>
+        <Footer />
+      </div>
+    </Router>
+    
   );
 }
 
