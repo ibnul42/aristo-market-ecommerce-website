@@ -4,7 +4,7 @@ import Search from "./Search";
 import { Link, Route } from "react-router-dom";
 import { useAlert } from "react-alert";
 import { useDispatch, useSelector } from "react-redux";
-import {logout} from '../../actions/userActions';
+import { logout } from "../../actions/userActions";
 
 const Header = () => {
   const alert = useAlert();
@@ -13,11 +13,10 @@ const Header = () => {
   const { user, loading } = useSelector((state) => state.auth);
   const { cartItems } = useSelector((state) => state.cart);
 
-
-  const logoutHandler = () =>{
+  const logoutHandler = () => {
     dispatch(logout());
-    alert.success('Logged out Successfully');
-  }
+    alert.success("Logged out Successfully");
+  };
 
   console.log(user);
 
@@ -76,19 +75,23 @@ const Header = () => {
               >
                 {user && user.roles === "admin" && (
                   <Link className="dropdown-item" to="/dashboard">
-                  Dashboard
-                </Link>
+                    Dashboard
+                  </Link>
                 )}
 
-<Link className="dropdown-item" to="/orders/me">
-                    Orders
-                  </Link>
+                <Link className="dropdown-item" to="/orders/me">
+                  Orders
+                </Link>
 
                 <Link className="dropdown-item" to="/me">
                   Profile
                 </Link>
 
-                <Link className="dropdown-item text-danger" to="/" onClick={logoutHandler} >
+                <Link
+                  className="dropdown-item text-danger"
+                  to="/"
+                  onClick={logoutHandler}
+                >
                   Logout
                 </Link>
               </div>
