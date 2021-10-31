@@ -7,8 +7,8 @@ const Product = ({product, col}) => {
       <div className="card p-3 rounded">
         <img
           className="card-img-top mx-auto"
-          src="https://tes.com.bd/mymarket/media/Fresh_Herb_Origin_Serum0.png" 
-          alt=""
+          src={product.images[0].url}
+          alt={product.name}
         />
         <div className="card-body d-flex flex-column">
           <h5 className="card-title">
