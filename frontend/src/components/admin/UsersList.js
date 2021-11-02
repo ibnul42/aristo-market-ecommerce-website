@@ -4,52 +4,44 @@ import { MDBDataTable } from "mdbreact";
 
 import MetaData from "../layout/MetaData";
 import Loader from "../layout/Loader";
-
 import Sidebar from "./Sidebar";
 
 import { useAlert } from "react-alert";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getAdminProducts,
-  clearErrors,
-  deleteProduct,
-} from "../../actions/productActions";
-import { DELETE_PRODUCT_RESET } from "../../constants/productConstants";
+import { allUsers, deleteUser, clearErrors } from "../../actions/userActions";
+import { DELETE_USER_RESET } from "../../constants/userConstants";
 
-const ProductsList = ({ history }) => {
+const UsersList = ({ history }) => {
   const alert = useAlert();
   const dispatch = useDispatch();
 
-  const { loading, error, products } = useSelector((state) => state.products);
-  const { error: deleteError, isDeleted } = useSelector(
-    (state) => state.product
-  );
+  const { loading, error, users } = useSelector((state) => state.allUsers);
+  const { isDeleted } = useSelector((state) => state.user);
 
   useEffect(() => {
-    dispatch(getAdminProducts());
+    dispatch(allUsers());
 
     if (error) {
       alert.error(error);
       dispatch(clearErrors());
     }
 
-    if (deleteError) {
-      alert.error(deleteError);
-      dispatch(clearErrors());
-    }
-
     if (isDeleted) {
-      alert.success("Product deleted successfully");
-      history.push("/admin/products");
-      dispatch({ type: DELETE_PRODUCT_RESET });
+      alert.success("User deleted successfully");
+      history.push("/admin/users");
+      dispatch({ type: DELETE_USER_RESET });
     }
-  }, [dispatch, alert, error, deleteError, history, isDeleted]);
+  }, [dispatch, alert, error, isDeleted, history]);
 
-  const setProducts = () => {
+  const deleteUserHandler = (id) => {
+    dispatch(deleteUser(id));
+  };
+
+  const setUsers = () => {
     const data = {
       columns: [
         {
-          label: "ID",
+          label: "User ID",
           field: "id",
           sort: "asc",
         },
@@ -59,13 +51,13 @@ const ProductsList = ({ history }) => {
           sort: "asc",
         },
         {
-          label: "Price",
-          field: "price",
+          label: "Email",
+          field: "email",
           sort: "asc",
         },
         {
-          label: "Stock",
-          field: "stock",
+          label: "Roles",
+          field: "roles",
           sort: "asc",
         },
         {
@@ -76,24 +68,25 @@ const ProductsList = ({ history }) => {
       rows: [],
     };
 
-    products.forEach((product) => {
+    users.forEach((user) => {
       data.rows.push({
-        id: product._id,
-        name: product.name,
-        price: `$${product.price}`,
-        stock: product.stock,
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        roles: user.roles,
+
         actions: (
           <Fragment>
             <Link
-              to={`/admin/product/${product._id}`}
+              to={`/admin/user/${user._id}`}
               className="btn btn-primary py-1 px-2"
-              key={product._id}
+              onClick={() => console.log("Hello!")}
             >
               <i className="fa fa-pencil"></i>
             </Link>
             <button
               className="btn btn-danger py-1 px-2 ml-2"
-              onClick={() => deleteProductHandler(product._id)}
+              onClick={() => deleteUserHandler(user._id)}
             >
               <i className="fa fa-trash"></i>
             </button>
@@ -101,36 +94,32 @@ const ProductsList = ({ history }) => {
         ),
       });
     });
-    return data;
-  };
 
-  const deleteProductHandler = (id) => {
-    dispatch(deleteProduct(id));
+    return data;
   };
 
   return (
     <Fragment>
-      <MetaData title={"All Products"} />
+      <MetaData title={"All Users"} />
       <div className="row">
         <div className="col-12 col-md-2">
           <Sidebar />
         </div>
+
         <div className="col-12 col-md-10">
           <Fragment>
-            <h1 className="my-5">All Products</h1>
+            <h1 className="my-5">All Users</h1>
 
             {loading ? (
               <Loader />
             ) : (
-              <Fragment>
-                <MDBDataTable
-                  data={setProducts()}
-                  className="px-3"
-                  bordered
-                  striped
-                  hover
-                />
-              </Fragment>
+              <MDBDataTable
+                data={setUsers()}
+                className="px-3"
+                bordered
+                striped
+                hover
+              />
             )}
           </Fragment>
         </div>
@@ -139,4 +128,4 @@ const ProductsList = ({ history }) => {
   );
 };
 
-export default ProductsList;
+export default UsersList;

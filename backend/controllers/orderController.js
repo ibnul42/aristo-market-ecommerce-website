@@ -97,12 +97,12 @@ exports.updateOrder = catchAsyncErrors(async (req, res, next) => {
 });
 
 async function updateStock(id, quantity) {
-    const product = await Product.findById(id.toString());
+    const product = await Product.findById(id);
 
     product.stock = product.stock - quantity;
 
-    await product.save({ validateBeforeSave: false });
-};
+    await product.save({ validateBeforeSave: false })
+}
 
 // delete orders - ADMIN => /api/v1/admin/order/:id
 exports.deleteOrder = catchAsyncErrors(async (req, res, next) => {
